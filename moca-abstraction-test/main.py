@@ -7,7 +7,6 @@ app = FastAPI()
 
 def parse_ai_result(text):
     score = 1 if "Score: 1" in text else 0
-    # استخراج التحليل بعد كلمة Analysis: أو إرجاع النص كاملاً إذا لم توجد
     analysis = text.split("Analysis:")[1].strip() if "Analysis:" in text else text
     return score, analysis
 
@@ -18,7 +17,6 @@ async def check_transport(audio: UploadFile = File(...)):
     text = speech_to_text(path)
     if os.path.exists(path): os.remove(path)
     
-    # معالجة حالة عدم وجود صوت أو صوت غير مفهوم
     if not text or text.strip() == "":
         return {
             "question": "Abstraction: Train-Bicycle",
@@ -46,7 +44,6 @@ async def check_measurement(audio: UploadFile = File(...)):
     text = speech_to_text(path)
     if os.path.exists(path): os.remove(path)
     
-    # معالجة حالة عدم وجود صوت أو صوت غير مفهوم
     if not text or text.strip() == "":
         return {
             "question": "Abstraction: Watch-Ruler",
