@@ -1,6 +1,5 @@
 import re
 
-# الأهداف
 FORWARD_TARGET = ["2", "1", "8", "5", "4"]
 BACKWARD_TARGET = ["2", "4", "7"]
 
