@@ -6,10 +6,8 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 client = InferenceClient(api_key=HF_TOKEN)
 
 def analyze_orientation(patient_text_summary, real_place, real_city):
-    # جلب معلومات الوقت الحالي من السيرفر
     now = datetime.now()
     
-    # خريطة الأشهر لتسهيل المقارنة (الاسم والرقم)
     months_map = {
         1: ["يناير", "كانون الثاني", "واحد", "1"],
         2: ["فبراير", "شباط", "اتنين", "تنين", "اثنين", "2"],
@@ -35,7 +33,7 @@ def analyze_orientation(patient_text_summary, real_place, real_city):
     current_month_options = months_map[current_month_num]
 
     prompt = f"""
-    أنت طبيب أعصاب خبير ورحيم. قيم إجابات مريض في اختبار التوجه (Orientation).
+    أنت طبيب أعصاب خبير . قيم إجابات مريض في اختبار التوجه (Orientation).
     
     الحقائق الحقيقية الآن:
     1. يوم الأسبوع: {current_day_name}
