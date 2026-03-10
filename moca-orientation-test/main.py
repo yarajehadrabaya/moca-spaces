@@ -42,7 +42,6 @@ async def check_orientation(
         
         combined_transcription += f"- {label}: {text if text else '[صوت غير واضح]'}\n"
 
-    # نرسل النصوص المجمعة للتحليل الذكي
     raw_res = analyze_orientation(combined_transcription, expected_place, expected_city)
     score, analysis = parse_res(raw_res)
     
