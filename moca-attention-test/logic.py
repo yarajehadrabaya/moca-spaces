@@ -4,7 +4,6 @@ import re
 FORWARD_TARGET = ["2", "1", "8", "5", "4"]
 BACKWARD_TARGET = ["2", "4", "7"]
 
-# خريطة تحويل الكلمات إلى أرقام صافية
 WORD_TO_DIGIT = {
     "واحد": "1", "وحد": "1", "احد": "1",
     "اثنان": "2", "اثنين": "2", "اتنين": "2", "تنين": "2",
@@ -24,22 +23,18 @@ def normalize_arabic(text):
     text = re.sub("[إأآا]", "ا", text)
     text = re.sub("ى", "ي", text)
     text = re.sub("ة", "ه", text)
-    # إزالة حروف العطف الملتصقة بالأرقام (مثل وتلاتة تصبح تلاتة)
     text = re.sub(r"\bو", "", text) 
     return text
 
 def extract_digits(text):
     if not text: return []
-    # تنظيف النص
     clean_text = normalize_arabic(text)
     
-    # 1. محاولة استخراج الأرقام الحسابية أولاً (مثل 93, 86)
-    # نستخدم \d+ للحصول على الرقم كامل وليس خاناته منفصلة
+
     raw_numbers = re.findall(r'\d+', clean_text)
     if raw_numbers:
         return raw_numbers
 
-    # 2. إذا لم يجد أرقاماً حسابية، يبحث عن الكلمات
     words = clean_text.split()
     found_digits = []
     for w in words:
@@ -52,14 +47,12 @@ def evaluate_forward(digits):
     return 1 if digits == FORWARD_TARGET else 0
 
 def evaluate_backward(digits):
-    # المريض يقول 2 4 7 (عكس 7 4 2)
     return 1 if digits == BACKWARD_TARGET else 0
 
 def evaluate_subtraction(digits):
     if not digits: return 0, 0
     correct_count = 0
     previous = 100
-    # تحويل القائمة إلى أرقام صحيحة (93, 86...)
     nums = [int(d) for d in digits]
     
     for n in nums:
