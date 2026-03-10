@@ -10,15 +10,12 @@ def process_clock(image_bytes):
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     if img is None: return {"error": "read_error", "score": 0}
 
-    # 1. تحسين التباين وتكبير الصورة لزيادة دقة الخطوط الرقيقة
     img = cv2.resize(img, (800, 800))
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
-    # استخدام تقنية كشف الحواف المزدوجة لضمان عدم ضياع الخطوط الرقيقة
     clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8,8))
     gray = clahe.apply(gray)
     
-    # تنظيف متوازن
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
     thresh = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 25, 8)
 
@@ -26,10 +23,8 @@ def process_clock(image_bytes):
     center_x, center_y = 400, 400
     radius_detected = 300
     
-    # 2. البحث عن الدائرة (بمعايير مرنة جداً للرسم اليدوي)
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if contours:
-        # ترتيب حسب المساحة واختيار الأنسب كدائرة وليس الأكبر فقط
         cnts = sorted(contours, key=cv2.contourArea, reverse=True)
         for c in cnts:
             area = cv2.contourArea(c)
@@ -37,7 +32,6 @@ def process_clock(image_bytes):
             if peri == 0: continue
             circularity = 4 * np.pi * area / (peri**2)
             
-            # إذا كانت المساحة معقولة والشكل "مغلق" كفاية
             if area > 5000 and circularity > 0.35:
                 circle_present = True
                 M = cv2.moments(c)
@@ -45,18 +39,15 @@ def process_clock(image_bytes):
                     center_x = int(M['m10'] / M['m00'])
                     center_y = int(M['m01'] / M['m00'])
                 
-                # تقدير نصف القطر بناءً على المساحة
                 radius_detected = int(np.sqrt(area / np.pi))
                 break
 
-    # 3. فحص توزيع الأرقام (داخل نطاق الدائرة المكتشفة)
     edges = cv2.Canny(gray, 50, 150)
     ys, xs = np.where(edges > 0)
     bins = [0] * 12
     for x_p, y_p in zip(xs, ys):
         dx, dy = x_p - center_x, center_y - y_p
         d = np.hypot(dx, dy)
-        # البحث في حواف الساعة المكتشفة
         if 0.7 * radius_detected < d < 1.1 * radius_detected:
             ang = (np.degrees(np.arctan2(dy, dx)) + 360) % 360
             bins[int(ang // 30)] += 1
@@ -64,7 +55,6 @@ def process_clock(image_bytes):
     occupied = sum(b > 5 for b in bins)
     num_ok = (occupied >= 8)
 
-    # 4. فحص العقارب (بناءً على الزوايا من المركز المكتشف)
     angle_votes = []
     for x_p, y_p in zip(xs, ys):
         dist = np.hypot(x_p - center_x, center_y - y_p)
@@ -76,7 +66,6 @@ def process_clock(image_bytes):
     if len(angle_votes) > 30:
         hist, b_edges = np.histogram(angle_votes, bins=24, range=(0, 360))
         peaks = [i for i in range(len(hist)) if hist[i] > (max(hist)*0.4)]
-        # فحص زاوية الـ 11 (حول 120 درجة) والـ 2 (حول 30 درجة)
         h_ok = any(100 < (p*15) < 170 for p in peaks)
         m_ok = any(0 <= (p*15) < 60 or 330 < (p*15) <= 360 for p in peaks)
         time_ok = (h_ok and m_ok)
@@ -93,7 +82,6 @@ def process_clock(image_bytes):
     }
 
 def process_cube(image_bytes):
-    # يبقى كما هو (ممتاز)
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -108,7 +96,6 @@ def process_cube(image_bytes):
     return {"score": score, "lines": len(lines) if lines is not None else 0, "vertices": v_count}
 
 def process_trails(patient_data):
-    # يبقى كما هو (ممتاز)
     if not os.path.exists("tmt_targets.json"): return {"score": 0}
     with open("tmt_targets.json", "r", encoding="utf-8") as f: targets = json.load(f)
     points = patient_data["points"]
