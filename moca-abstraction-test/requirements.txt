@@ -1,0 +1,8 @@
+huggingface_hub
+fastapi
+uvicorn
+python-multipart
+SpeechRecognition
+pydub
+requests
+Pillow
