@@ -6,7 +6,6 @@ from qwen_engine import analyze_with_qwen
 app = FastAPI()
 
 def parse_res(res):
-    # تنظيف النص من أي كلمات تحليلية زائدة
     return res.split("Analysis:")[1].strip() if "Analysis:" in res else res
 
 @app.post("/clock")
