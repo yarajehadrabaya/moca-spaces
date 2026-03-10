@@ -13,17 +13,13 @@ async def check_fluency(audio: UploadFile = File(...)):
         with open(temp_input, "wb") as buffer:
             shutil.copyfileobj(audio.file, buffer)
         
-        # 1. تحويل الصوت لنص
         raw_text = speech_to_text(temp_input)
         if os.path.exists(temp_input): os.remove(temp_input)
         
-        # 2. التحليل البرمجي (العد)
         logic_res = evaluate_fluency_logic(raw_text)
         
-        # 3. التحليل الطبي (الذكاء الاصطناعي)
         ai_res = get_fluency_analysis(raw_text, logic_res)
         
-        # استخراج السكور
         final_score = logic_res['score']
         analysis = ai_res.split("Analysis:")[1].strip() if "Analysis:" in ai_res else ai_res
 
