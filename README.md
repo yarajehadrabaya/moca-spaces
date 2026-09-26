@@ -4,6 +4,14 @@ This repository contains the modular implementation of a hybrid AI-assisted scor
 
 Each module corresponds to a cognitive domain and is deployed as an independent Hugging Face Space.
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22983116.svg)](https://doi.org/10.5281/zenodo.22983116)
+
+## Archived Release
+
+The validated `v1.0.0` code release is archived on Zenodo:
+
+**DOI:** [10.5281/zenodo.22983116](https://doi.org/10.5281/zenodo.22983116)
+
 ---
 
 ## 🧠 System Modules
@@ -69,4 +77,10 @@ are licensed under the **Creative Commons Attribution 4.0 International License
 link to the license, and an indication of changes.
 
 License: https://creativecommons.org/licenses/by/4.0/
+
+## Citation
+
+If you use this code in academic research, please cite:
+
+> Hybrid Explainable AI MoCA System (Arabic) (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.22983116
 
