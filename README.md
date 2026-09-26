@@ -53,3 +53,20 @@ No personal data are stored in this repository. All participant data were anonym
 
 Developed as part of a clinical validation study on AI-assisted cognitive screening for Arabic-speaking populations.
 
+---
+
+## 🔐 Configuration
+
+The language, memory, abstraction, attention, orientation, and vision modules
+use Hugging Face Inference API access. Set the `HF_TOKEN` environment variable
+in each deployment environment; do not commit tokens or `.env` files.
+
+## 📄 License
+
+Unless otherwise stated, the source code and documentation in this repository
+are licensed under the **Creative Commons Attribution 4.0 International License
+(CC BY 4.0)**. You may share and adapt the material with appropriate credit, a
+link to the license, and an indication of changes.
+
+License: https://creativecommons.org/licenses/by/4.0/
+

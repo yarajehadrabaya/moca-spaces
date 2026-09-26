@@ -20,8 +20,12 @@ def evaluate_naming_logic(text_list):
     for text in text_list:
         norm = normalize_arabic(text)
         for key, val in STT_CONFUSION.items():
-            if key in norm: norm = val
+            if normalize_arabic(key) in norm:
+                norm = normalize_arabic(val)
         
         for target in NAMING_WORDS:
-            if target in norm or SequenceMatcher(None, norm, target).ratio() > 0.85
+            normalized_target = normalize_arabic(target)
+            if normalized_target in norm or SequenceMatcher(None, norm, normalized_target).ratio() > 0.85:
+                if target not in matched:
+                    matched.append(target)
     return matched
