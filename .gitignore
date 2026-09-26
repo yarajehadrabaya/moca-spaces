@@ -1,0 +1,15 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+
+# Local environments and secrets
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Temporary uploads created by the API endpoints
+input_*
+temp_*
